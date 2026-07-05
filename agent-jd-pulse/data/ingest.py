@@ -24,7 +24,6 @@ def get_spotify_client():
 def get_artist_data(artist_name: str):
     """
     Fetches core artist data from Spotify.
-    Returns artist profile, popularity, followers, and genres.
     """
     sp = get_spotify_client()
 
@@ -36,15 +35,19 @@ def get_artist_data(artist_name: str):
         return {"error": f"Artist '{artist_name}' not found on Spotify."}
 
     artist = artists[0]
+    artist_id = artist.get("id", "")
+
+    # Fetch full artist object directly for complete data
+    full_artist = sp.artist(artist_id)
 
     return {
-        "name": artist.get("name", "Unknown"),
-        "spotify_id": artist.get("id", ""),
-        "popularity": artist.get("popularity", 0),
-        "followers": artist.get("followers", {}).get("total", 0),
-        "genres": artist.get("genres", []),
-        "spotify_url": artist.get("external_urls", {}).get("spotify", ""),
-        "image_url": artist["images"][0]["url"] if artist.get("images") else None
+        "name": full_artist.get("name", "Unknown"),
+        "spotify_id": artist_id,
+        "popularity": full_artist.get("popularity", 0),
+        "followers": full_artist.get("followers", {}).get("total", 0),
+        "genres": full_artist.get("genres", []),
+        "spotify_url": full_artist.get("external_urls", {}).get("spotify", ""),
+        "image_url": full_artist["images"][0]["url"] if full_artist.get("images") else None
     }
 
 
