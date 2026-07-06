@@ -1,1 +1,16 @@
-﻿.env
+﻿# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated reports
+agent-jd-pulse/reports/output/
+
+# Virtual environment
+venv/
+
+# VS Code
+.vscode/
