@@ -5,6 +5,7 @@ import os
 import sys
 import uuid
 from datetime import datetime
+import httpx
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -114,6 +115,37 @@ async def create_order(request: PulseRequest, background_tasks: BackgroundTasks)
         message=f"Order received. Report for {request.artist_name} is being generated."
     )
 
+async def commission_press_agent(artist_name: str, pulse_data: dict):
+    """
+    A2A call — Agent JD: Pulse commissions Agent JD: Press
+    to generate an EPK for the same artist automatically.
+    """
+    try:
+        press_url = "http://127.0.0.1:8001/order"
+
+        payload = {
+            "artist_name": artist_name,
+            "pulse_data": pulse_data
+        }
+
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(press_url, json=payload)
+
+            if response.status_code == 200:
+                press_order = response.json()
+                print(f"Agent JD: Press commissioned successfully!")
+                print(f"Press order ID: {press_order.get('order_id')}")
+                return press_order
+            else:
+                print(f"Agent JD: Press commission failed: {response.status_code}")
+                return None
+
+    except httpx.ConnectError:
+        print("Agent JD: Press is not running — skipping EPK generation.")
+        return None
+    except Exception as e:
+        print(f"A2A commission error: {str(e)}")
+        return None
 
 async def process_order(order_id: str, artist_name: str, tier: str):
     """
@@ -149,6 +181,13 @@ async def process_order(order_id: str, artist_name: str, tier: str):
         orders[order_id]["completed_at"] = datetime.now().isoformat()
 
         print(f"Order {order_id} completed. Report at: {report_path}")
+
+        # Step 5 — A2A: Commission Agent JD: Press
+        print(f"Commissioning Agent JD: Press for {artist_name}...")
+        await commission_press_agent(
+            artist_name=artist_name,
+            pulse_data=profile
+        )
 
     except Exception as e:
         orders[order_id]["status"] = "failed"
