@@ -6,8 +6,15 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Generated reports
+# Generated reports and EPKs
 agent-jd-pulse/reports/output/
+agent-jd-press/epk/output/
+
+# Cache files
+*.cache
+.cache
+agent-jd-pulse/.cache
+agent-jd-press/.cache
 
 # Virtual environment
 venv/
