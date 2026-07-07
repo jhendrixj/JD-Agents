@@ -121,7 +121,7 @@ async def commission_press_agent(artist_name: str, pulse_data: dict):
     to generate an EPK for the same artist automatically.
     """
     try:
-        press_url = "http://127.0.0.1:8001/order"
+        press_url = "https://agent-jd-press-production.up.railway.app/order"
 
         payload = {
             "artist_name": artist_name,
