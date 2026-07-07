@@ -12,8 +12,14 @@ load_dotenv()
 # ─────────────────────────────────────────
 
 def get_spotify_client():
-    client_id = os.getenv("SPOTIFY_CLIENT_ID")
-    client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
+    client_id = (
+        os.getenv("SPOTIFY_CLIENT_ID") or
+        os.getenv("SPOTIPY_CLIENT_ID")
+    )
+    client_secret = (
+        os.getenv("SPOTIFY_CLIENT_SECRET") or
+        os.getenv("SPOTIPY_CLIENT_SECRET")
+    )
     auth_manager = SpotifyClientCredentials(
         client_id=client_id,
         client_secret=client_secret
