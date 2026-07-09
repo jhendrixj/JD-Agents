@@ -65,7 +65,7 @@ def root():
         "status": "online",
         "description": "Music intelligence and analytics for independent artists",
         "tiers": {
-            "basic": "Streaming analytics and audience report — $15",
+            "basic": "Streaming analytics and audience report — $1",
             "pro": "Full report including social, revenue gaps, and benchmarking — $35",
             "forecast": "Pro + predictive release timing and growth projection — $65"
         }
